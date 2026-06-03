@@ -1,7 +1,20 @@
+using SpaceGuard.Interfaces;
+using SpaceGuard.Repositories;
+using SpaceGuard.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Dependency Injection
+builder.Services.AddScoped<ISateliteRepository, SateliteRepository>();
+builder.Services.AddScoped<IIndicadorRepository, IndicadorRepository>();
+builder.Services.AddScoped<IAlertaRepository, AlertaRepository>();
+
+builder.Services.AddScoped<ISateliteService, SateliteService>();
+builder.Services.AddScoped<IIndicadorService, IndicadorService>();
+builder.Services.AddScoped<IAlertaService, AlertaService>();
 
 var app = builder.Build();
 
@@ -9,7 +22,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -24,6 +36,5 @@ app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();
