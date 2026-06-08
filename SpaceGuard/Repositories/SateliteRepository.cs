@@ -1,37 +1,45 @@
-﻿using SpaceGuard.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SpaceGuard.Data;
+using SpaceGuard.Interfaces;
 using SpaceGuard.Models;
 
 namespace SpaceGuard.Repositories;
 
 public class SateliteRepository : ISateliteRepository
 {
-    private readonly List<Satelite> _satelites = [];
+    private readonly SpaceGuardContext _context;
+
+    public SateliteRepository(SpaceGuardContext context)
+    {
+        _context = context;
+    }
 
     public IEnumerable<Satelite> ObterTodos()
     {
-        return _satelites;
+        return _context.Satelites
+            .Include(s => s.Indicadores)
+            .Include(s => s.Alertas)
+            .ToList();
     }
 
     public Satelite? ObterPorId(int id)
     {
-        return _satelites.FirstOrDefault(s => s.Id == id);
+        return _context.Satelites
+            .Include(s => s.Indicadores)
+            .Include(s => s.Alertas)
+            .FirstOrDefault(s => s.Id == id);
     }
 
     public void Adicionar(Satelite satelite)
     {
-        _satelites.Add(satelite);
+        _context.Satelites.Add(satelite);
+        _context.SaveChanges();
     }
 
     public void Atualizar(Satelite satelite)
     {
-        var existente = ObterPorId(satelite.Id);
-
-        if (existente != null)
-        {
-            existente.Nome = satelite.Nome;
-            existente.PaisOrigem = satelite.PaisOrigem;
-            existente.DataLancamento = satelite.DataLancamento;
-        }
+        _context.Satelites.Update(satelite);
+        _context.SaveChanges();
     }
 
     public void Remover(int id)
@@ -40,7 +48,8 @@ public class SateliteRepository : ISateliteRepository
 
         if (satelite != null)
         {
-            _satelites.Remove(satelite);
+            _context.Satelites.Remove(satelite);
+            _context.SaveChanges();
         }
     }
 }

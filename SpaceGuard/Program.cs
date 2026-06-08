@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using SpaceGuard.Data;
 using SpaceGuard.Interfaces;
 using SpaceGuard.Repositories;
 using SpaceGuard.Services;
@@ -5,6 +7,9 @@ using SpaceGuard.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<SpaceGuardContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<ISateliteRepository, SateliteRepository>();
 builder.Services.AddScoped<IIndicadorRepository, IndicadorRepository>();
@@ -21,8 +26,6 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
-app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 

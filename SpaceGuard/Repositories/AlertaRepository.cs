@@ -1,38 +1,38 @@
-﻿using SpaceGuard.Interfaces;
+﻿using SpaceGuard.Data;
+using SpaceGuard.Interfaces;
 using SpaceGuard.Models;
 
 namespace SpaceGuard.Repositories;
 
 public class AlertaRepository : IAlertaRepository
 {
-    private readonly List<AlertaAmbiental> _alertas = [];
+    private readonly SpaceGuardContext _context;
+
+    public AlertaRepository(SpaceGuardContext context)
+    {
+        _context = context;
+    }
 
     public IEnumerable<AlertaAmbiental> ObterTodos()
     {
-        return _alertas;
+        return _context.AlertasAmbientais.ToList();
     }
 
     public AlertaAmbiental? ObterPorId(int id)
     {
-        return _alertas.FirstOrDefault(a => a.Id == id);
+        return _context.AlertasAmbientais.FirstOrDefault(a => a.Id == id);
     }
 
     public void Adicionar(AlertaAmbiental alerta)
     {
-        _alertas.Add(alerta);
+        _context.AlertasAmbientais.Add(alerta);
+        _context.SaveChanges();
     }
 
     public void Atualizar(AlertaAmbiental alerta)
     {
-        var existente = ObterPorId(alerta.Id);
-
-        if (existente != null)
-        {
-            existente.Titulo = alerta.Titulo;
-            existente.Descricao = alerta.Descricao;
-            existente.NivelRisco = alerta.NivelRisco;
-            existente.DataCriacao = alerta.DataCriacao;
-        }
+        _context.AlertasAmbientais.Update(alerta);
+        _context.SaveChanges();
     }
 
     public void Remover(int id)
@@ -41,7 +41,8 @@ public class AlertaRepository : IAlertaRepository
 
         if (alerta != null)
         {
-            _alertas.Remove(alerta);
+            _context.AlertasAmbientais.Remove(alerta);
+            _context.SaveChanges();
         }
     }
 }
