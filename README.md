@@ -1,5 +1,13 @@
 # SpaceGuard
 
+## Integrantes do grupo
+
+Caio Felipe Silva Rm 564615
+Davi Tagawa Schincaglia Lima Lemos RM563457
+Luis Guilherme Borges Silva Rm 566548
+Leonardo Zerbinatti de Sales Rm562992
+Vinícius Luis Exposito Morassi Garcia Rm563340
+
 ##  Sobre o Projeto
 
 O SpaceGuard é uma aplicação desenvolvida para monitoramento ambiental utilizando dados de satélites. O sistema permite o gerenciamento de satélites, indicadores ambientais e alertas ambientais, contribuindo para a análise de informações relacionadas à qualidade ambiental e riscos climáticos.
